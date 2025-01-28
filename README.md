@@ -45,19 +45,18 @@ mkdir SurRoL/surrol/data/demo
 python SurRoL/surrol/data/data_generation.py --env NeedlePick-v0 
 ```
 
-## اجرای مدیریت نخ بخیه
+## ساخت دیتا برای مدیریت نخ بخیه (محیط ساختگی من)
 ```bash
 python SurRoL/surrol/data/data_generation.py --env SutureThreadManagement-v0 
 ```
 
-- آموزش **DEX** برای مدیریت نخ بخیه:
+- ### آموزش اجرا **DEX** برای مدیریت نخ بخیه با الگوریتم های مختلف(محیط ساختگی من):
 ```bash
 python3 train.py task=SutureThreadManagement-v0 agent=dex use_wb=True
 ```
 
 ### و به همین ترتیب...
 
-## دستورات آموزش 
 
 - آموزش **DEX**:
 ```bash
