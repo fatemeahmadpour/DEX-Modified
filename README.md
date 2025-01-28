@@ -50,7 +50,7 @@ python SurRoL/surrol/data/data_generation.py --env NeedlePick-v0
 python SurRoL/surrol/data/data_generation.py --env SutureThreadManagement-v0 
 ```
 
-- ### آموزش اجرا **DEX** برای مدیریت نخ بخیه با الگوریتم های مختلف(محیط ساختگی من):
+### آموزش اجرا **DEX** برای مدیریت نخ بخیه با الگوریتم های مختلف(محیط ساختگی من):
 ```bash
 python3 train.py task=SutureThreadManagement-v0 agent=dex use_wb=True
 ```
