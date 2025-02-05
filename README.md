@@ -13,8 +13,9 @@
 
 1. این مخزن را کلون کنید:
 ```bash
-git clone --recursive https://github.com/med-air/DEX.git
+git clone https://github.com/fatemeahmadpour/DEX-Modified.git
 cd DEX
+git clone https://github.com/fatemeahmadpour/SurRoL.git SurRoL 
 ```
 
 2. یک محیط مجازی ایجاد کنید:
