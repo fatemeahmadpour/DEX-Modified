@@ -1,153 +1,158 @@
-# DEX: Demonstration-Guided RL with Efficient Exploration for Task Automation of Surgical Robot
-This is the official PyTorch implementation of the paper "**Demonstration-Guided Reinforcement Learning with
-Efficient Exploration for Task Automation of Surgical Robot**" (ICRA 2023). 
-<p align="left">
+# DEX: یادگیری تقویتی هدایت‌شده با نمایش همراه با کاوش کارآمد برای خودکارسازی وظایف ربات جراحی
+
+این پیاده‌سازی رسمی PyTorch از مقاله "**یادگیری تقویتی هدایت‌شده با نمایش همراه با کاوش کارآمد برای خودکارسازی وظایف ربات جراحی**" (ICRA 2023) است.  
+<p align="left"> 
   <img width="98%" src="docs/resources/dex_teaser.png">
 </p>
 
-# Prerequisites
-* Ubuntu 18.04
-* Python 3.7+
+# پیش‌نیازها
+* Ubuntu 18.04  
+* Python 3.7+  
 
+# دستورالعمل نصب
 
-# Installation Instructions
-
-1. Clone this repository.
+1. این مخزن را کلون کنید:
 ```bash
 git clone --recursive https://github.com/med-air/DEX.git
 cd DEX
 ```
 
-2. Create a virtual environment
+2. یک محیط مجازی ایجاد کنید:
 ```bash
 conda create -n dex python=3.8
 conda activate dex
 ```
 
-3. Install packages
-
+3. بسته‌ها را نصب کنید:
 ```bash
-pip3 install -e SurRoL/	# install surrol environments
+pip3 install -e SurRoL/	# نصب محیط‌های surrol
 pip3 install -r requirements.txt
 pip3 install -e .
 ```
 
-4. Then add one line of code at the top of `gym/gym/envs/__init__.py` to register SurRoL tasks:
-
+4. سپس یک خط کد به بالای فایل `gym/gym/envs/__init__.py` اضافه کنید تا وظایف SurRoL ثبت شوند:
 ```python
-# directory: anaconda3/envs/dex/lib/python3.8/site-packages/
+# مسیر: anaconda3/envs/dex/lib/python3.8/site-packages/
 import surrol.gym
 ```
 
-# Usage
-Commands for DEX and all baselines. Results will be logged to WandB. Before running the commands below, please change the wandb entity in [```train.yaml```](dex/configs/train.yaml#L26) to match your account.
+# استفاده
+دستورات برای اجرای DEX و تمامی الگوریتم‌های پایه. نتایج در WandB ثبت خواهند شد. پیش از اجرای دستورات زیر، لطفاً موجودیت wandb را در فایل [```train.yaml```](dex/configs/train.yaml#L26) به حساب خود تغییر دهید.
 
-We collect demonstration data via the scripted controllers provided by SurRoL. Take the NeedlePick task as example:
+ما داده‌های نمایش را از طریق کنترل‌کننده‌های اسکریپت‌شده ارائه‌شده توسط SurRoL جمع‌آوری می‌کنیم. به عنوان مثال، وظیفه NeedlePick:  
 ```bash
 mkdir SurRoL/surrol/data/demo
 python SurRoL/surrol/data/data_generation.py --env NeedlePick-v0 
 ```
-## Training Commands 
 
-- Train **DEX**:
+## ساخت دیتا برای مدیریت نخ بخیه (محیط ساختگی من)
+```bash
+python SurRoL/surrol/data/data_generation.py --env SutureThreadManagement-v0 
+```
+
+### آموزش اجرا **DEX** برای مدیریت نخ بخیه با الگوریتم های مختلف(محیط ساختگی من):
+```bash
+python3 train.py task=SutureThreadManagement-v0 agent=dex use_wb=True
+```
+
+### و به همین ترتیب...
+
+
+- آموزش **DEX**:
 ```bash
 python3 train.py task=NeedlePick-v0 agent=dex use_wb=True
 ```
 
-- Train **SAC**:
+- آموزش **SAC**:
 ```bash
 python3 train.py task=NeedlePick-v0 agent=sac use_wb=True
 ```
 
-- Train **DDPG**:
+- آموزش **DDPG**:
 ```bash
 python3 train.py task=NeedlePick-v0 agent=ddpg use_wb=True
 ```
 
-- Train **DDPGBC**:
+- آموزش **DDPGBC**:
 ```bash
 python3 train.py task=NeedlePick-v0 agent=ddpgbc use_wb=True
 ```
 
-- Train **CoL**:
+- آموزش **CoL**:
 ```bash
 python3 train.py task=NeedlePick-v0 agent=col use_wb=True
 ```
 
-- Train **AMP**:
+- آموزش **AMP**:
 ```bash
 python3 train.py task=NeedlePick-v0 agent=amp use_wb=True
 ```
 
-- Train **AWAC**:
+- آموزش **AWAC**:
 ```bash
 python3 train.py task=NeedlePick-v0 agent=awac use_wb=True
 ```
 
-- Train **SQIL**:
+- آموزش **SQIL**:
 ```bash
 python3 train.py task=NeedlePick-v0 agent=sqil use_wb=True
 ```
 
-Again, all commands can be run on other surgical tasks by replacing NeedlePick with the respective environment in the commands (for both demo collection and RL training).
+تمامی دستورات را می‌توان برای دیگر وظایف جراحی با جایگزینی NeedlePick با محیط مربوطه در دستورات اجرا کرد (چه برای جمع‌آوری داده‌ها و چه برای آموزش RL).
 
-We also implement synchronous parallelization of RL training, e.g., launch 4 parallel training processes:
-```
+ما همچنین اجرای موازی همگام‌سازی‌شده برای آموزش RL را پیاده‌سازی کرده‌ایم، مثلاً اجرای ۴ فرآیند آموزش موازی:
+```bash
 mpirun -np 4 python -m train agent=dex task=NeedlePick-v0 use_wb=True
 ```
-It should be noted that parallel training will lead to inconsistent performance, which require hyperparameters tuning.
 
-## Evaluation Commands
-We also provide a script for evaluate the saved model. The directory of the to-be-evaluated model should be included in the configuration file [```eval.yaml```](dex/configs/eval.yaml), where the checkpoint is specified by `ckpt_episode`. For instance:
-- Eval model trained by **DEX** in NeedlePick-v0:
+توجه داشته باشید که آموزش موازی می‌تواند منجر به عملکرد ناپایدار شود که نیاز به تنظیم پارامترهای ابر دارد.
+
+## دستورات ارزیابی
+اسکریپتی نیز برای ارزیابی مدل ذخیره‌شده فراهم شده است. مسیر مدل مورد ارزیابی باید در فایل تنظیمات [```eval.yaml```](dex/configs/eval.yaml) مشخص شود، جایی که نقطه بازیابی توسط `ckpt_episode` تعیین می‌شود. به عنوان مثال:  
+- ارزیابی مدل آموزش‌دیده توسط **DEX** در NeedlePick-v0:
 ```bash
 python3 eval.py task=NeedlePick-v0 agent=dex ckpt_episode=latest
 ```
 
-# Starting to Modify the Code
-## Modifying the hyperparameters
-The default hyperparameters are defined in `dex/configs`, where [```train.yaml```](dex/configs/train.yaml) defines the experiment settings and YAML file in the directory [```agent```](dex/configs/agent) defines the hyperparameters of each method. Modifications to these parameters can be directly defined in the experiment or agent config files, or passed through the terminal command. For example:
+# شروع به ویرایش کد
+## ویرایش پارامترهای ابر
+پارامترهای پیش‌فرض در `dex/configs` تعریف شده‌اند، جایی که [```train.yaml```](dex/configs/train.yaml) تنظیمات آزمایش را تعریف می‌کند و فایل‌های YAML در مسیر [```agent```](dex/configs/agent) پارامترهای هر روش را تعریف می‌کنند. تغییرات این پارامترها را می‌توان به‌طور مستقیم در فایل‌های تنظیمات آزمایش یا عامل تعریف کرد یا از طریق دستور ترمینال منتقل کرد. برای مثال:  
 ```bash
 python3 train.py task=NeedleRegrasp-v0 agent=dex use_wb=True batch_size=256 agent.aux_weight=10
 ```
-## Adding a new RL algorithm
-The core RL algorithms are implemented within the `BaseAgent` class. For adding a new algorithm, a new file needs to be created in
-`dex/agents` and [```BaseAgent```](dex/agents/base.py#L8) needs to be subclassed. In particular, any required
-networks (actor, critic etc) need to be constructed and the `update(...)` function and `get_action(...)` needs to be overwritten. For an example, 
-see the DDPGBC implementation in [```DDPGBC```](dex/agents/ddpgbc.py#L7). When implementation is done, a registration is needed in [```factory.py```](dex/agents/factory.py) and a config file should also be made in [```agent```](dex/configs/agent) to specify the model parameters. 
 
-## Transfering to other simulation platform
-Our code is designed for standard goal-conditioned gym-based environments and can be easily transfered to other platform if provide the same interfaces (e.g., OpenAI gym fetch). If no similar interface is provided, some modifications should be made to make it compatible, e.g., replay buffer and sampling utilities. We will make our code more generalizable in the future.
+## افزودن یک الگوریتم RL جدید
+الگوریتم‌های اصلی RL در کلاس `BaseAgent` پیاده‌سازی شده‌اند. برای افزودن یک الگوریتم جدید، یک فایل جدید باید در مسیر `dex/agents` ایجاد شود و [```BaseAgent```](dex/agents/base.py#L8) باید زیرکلاس شود. به‌طور خاص، هر شبکه مورد نیاز (actor, critic و غیره) باید ساخته شود و توابع `update(...)` و `get_action(...)` بازنویسی شوند. برای مثال، به پیاده‌سازی DDPGBC در [```DDPGBC```](dex/agents/ddpgbc.py#L7) مراجعه کنید. پس از تکمیل پیاده‌سازی، نیاز به ثبت در [```factory.py```](dex/agents/factory.py) و ایجاد یک فایل تنظیمات در مسیر [```agent```](dex/configs/agent) برای مشخص کردن پارامترهای مدل است.
 
-# Code Navigation
+## انتقال به پلتفرم شبیه‌سازی دیگر
+کد ما برای محیط‌های استاندارد مبتنی بر OpenAI gym با هدف هدف‌مند طراحی شده است و می‌تواند به‌راحتی به پلتفرم‌های دیگر انتقال یابد در صورتی که رابط‌های مشابه ارائه شوند. اگر چنین رابطی ارائه نشود، باید تغییراتی اعمال شود تا سازگار شود، مانند بافر بازپخش و ابزارهای نمونه‌برداری. در آینده کد ما عمومی‌تر خواهد شد.
+
+# مسیریابی کد
 
 ```
 dex
-  |- agents                # implements core algorithms in agent classes
-  |- components            # reusable infrastructure for model training
-  |    |- checkpointer.py  # handles saving + loading of model checkpoints
-  |    |- normalizer.py    # normalizer for vectorized input
-  |    |- logger.py        # implements core logging functionality using wandB
+  |- agents                # پیاده‌سازی الگوریتم‌های اصلی در کلاس‌های عامل
+  |- components            # زیرساخت‌های قابل استفاده مجدد برای آموزش مدل
+  |    |- checkpointer.py  # مدیریت ذخیره‌سازی و بارگذاری مدل
+  |    |- normalizer.py    # نرمال‌سازی برای ورودی‌های برداری
+  |    |- logger.py        # پیاده‌سازی عملکرد ثبت‌کننده اصلی با استفاده از wandB
   |
-  |- configs               # experiment configs 
-  |    |- train.yaml       # configs for rl training
-  |    |- eval.yaml        # configs for rl evaluation
-  |    |- agent            # configs for each algorithm (dex, ddpg, ddpgbc, etc.)
+  |- configs               # تنظیمات آزمایش
+  |    |- train.yaml       # تنظیمات برای آموزش RL
+  |    |- eval.yaml        # تنظیمات برای ارزیابی RL
+  |    |- agent            # تنظیمات برای هر الگوریتم (dex، ddpg، ddpgbc و غیره)
   |
-  |- modules               # reusable architecture components
-  |    |- critic.py        # basic critic implementations (eg MLP-based critic)
-  |    |- distributions.py # pytorch distribution utils for density model
-  |    |- policy.py    	   # basic actor implementations
-  |    |- replay_buffer.py # her replay buffer with future sampling strategy
-  |    |- sampler.py       # rollout sampler for collecting experience
-  |    |- subnetworks.py   # basic networks
+  |- modules               # اجزای معماری قابل استفاده مجدد
+  |    |- critic.py        # پیاده‌سازی‌های اصلی critic (مثلاً critic مبتنی بر MLP)
+  |    |- distributions.py # ابزارهای توزیع PyTorch برای مدل چگالی
+  |    |- policy.py    	   # پیاده‌سازی‌های اصلی actor
+  |    |- replay_buffer.py # بافر بازپخش HER با استراتژی نمونه‌برداری آینده
+  |    |- sampler.py       # نمونه‌بردار rollout برای جمع‌آوری تجربه
+  |    |- subnetworks.py   # شبکه‌های اصلی
   |
-  |- trainers              # main model training script, builds all components + runs training loop and logging
+  |- trainers              # اسکریپت اصلی آموزش مدل، ساخت همه اجزا و اجرای حلقه آموزش و ثبت لاگ
   |
-  |- utils                 # general and rl utilities, pytorch / visualization utilities etc
-  |- train.py              # experiment launcher
-  |- eval.py               # evaluation launcher
+  |- utils                 # ابزارهای عمومی و RL، ابزارهای PyTorch / مصورسازی و غیره
+  |- train.py              # راه‌انداز آزمایش
+  |- eval.py               # راه‌انداز ارزیابی
 ```
-
-# Contact
-For any questions, please feel free to email taou.cs13@gmail.com.
