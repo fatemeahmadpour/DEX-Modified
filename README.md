@@ -26,7 +26,7 @@ conda activate dex
 
 3. بسته‌ها را نصب کنید:
 ```bash
-pip3 install -e SurRoL/	# نصب محیط‌های surrol
+pip3 install -e SurRoL/
 pip3 install -r requirements.txt
 pip3 install -e .
 ```
