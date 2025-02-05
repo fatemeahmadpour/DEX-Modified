@@ -14,7 +14,7 @@
 1. این مخزن را کلون کنید:
 ```bash
 git clone https://github.com/fatemeahmadpour/DEX-Modified.git
-cd DEX
+cd DEX-Modified
 git clone https://github.com/fatemeahmadpour/SurRoL.git SurRoL 
 ```
 
