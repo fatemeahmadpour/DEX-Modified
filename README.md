@@ -53,7 +53,7 @@ python SurRoL/surrol/data/data_generation.py --env SutureThreadManagement-v0
 
 ### آموزش اجرا **DEX** برای مدیریت نخ بخیه با الگوریتم های مختلف(محیط ساختگی من):
 ```bash
-python3 train.py task=SutureThreadManagement-v0 agent=dex use_wb=True
+python train.py task=SutureThreadManagement-v0 agent=dex use_wb=True
 ```
 
 ### و به همین ترتیب...
@@ -61,42 +61,42 @@ python3 train.py task=SutureThreadManagement-v0 agent=dex use_wb=True
 
 - آموزش **DEX**:
 ```bash
-python3 train.py task=NeedlePick-v0 agent=dex use_wb=True
+python train.py task=NeedlePick-v0 agent=dex use_wb=True
 ```
 
 - آموزش **SAC**:
 ```bash
-python3 train.py task=NeedlePick-v0 agent=sac use_wb=True
+python train.py task=NeedlePick-v0 agent=sac use_wb=True
 ```
 
 - آموزش **DDPG**:
 ```bash
-python3 train.py task=NeedlePick-v0 agent=ddpg use_wb=True
+python train.py task=NeedlePick-v0 agent=ddpg use_wb=True
 ```
 
 - آموزش **DDPGBC**:
 ```bash
-python3 train.py task=NeedlePick-v0 agent=ddpgbc use_wb=True
+python train.py task=NeedlePick-v0 agent=ddpgbc use_wb=True
 ```
 
 - آموزش **CoL**:
 ```bash
-python3 train.py task=NeedlePick-v0 agent=col use_wb=True
+python train.py task=NeedlePick-v0 agent=col use_wb=True
 ```
 
 - آموزش **AMP**:
 ```bash
-python3 train.py task=NeedlePick-v0 agent=amp use_wb=True
+python train.py task=NeedlePick-v0 agent=amp use_wb=True
 ```
 
 - آموزش **AWAC**:
 ```bash
-python3 train.py task=NeedlePick-v0 agent=awac use_wb=True
+python train.py task=NeedlePick-v0 agent=awac use_wb=True
 ```
 
 - آموزش **SQIL**:
 ```bash
-python3 train.py task=NeedlePick-v0 agent=sqil use_wb=True
+python train.py task=NeedlePick-v0 agent=sqil use_wb=True
 ```
 
 تمامی دستورات را می‌توان برای دیگر وظایف جراحی با جایگزینی NeedlePick با محیط مربوطه در دستورات اجرا کرد (چه برای جمع‌آوری داده‌ها و چه برای آموزش RL).
@@ -112,14 +112,14 @@ mpirun -np 4 python -m train agent=dex task=NeedlePick-v0 use_wb=True
 اسکریپتی نیز برای ارزیابی مدل ذخیره‌شده فراهم شده است. مسیر مدل مورد ارزیابی باید در فایل تنظیمات [```eval.yaml```](dex/configs/eval.yaml) مشخص شود، جایی که نقطه بازیابی توسط `ckpt_episode` تعیین می‌شود. به عنوان مثال:  
 - ارزیابی مدل آموزش‌دیده توسط **DEX** در NeedlePick-v0:
 ```bash
-python3 eval.py task=NeedlePick-v0 agent=dex ckpt_episode=latest
+python eval.py task=NeedlePick-v0 agent=dex ckpt_episode=latest
 ```
 
 # شروع به ویرایش کد
 ## ویرایش پارامترهای ابر
 پارامترهای پیش‌فرض در `dex/configs` تعریف شده‌اند، جایی که [```train.yaml```](dex/configs/train.yaml) تنظیمات آزمایش را تعریف می‌کند و فایل‌های YAML در مسیر [```agent```](dex/configs/agent) پارامترهای هر روش را تعریف می‌کنند. تغییرات این پارامترها را می‌توان به‌طور مستقیم در فایل‌های تنظیمات آزمایش یا عامل تعریف کرد یا از طریق دستور ترمینال منتقل کرد. برای مثال:  
 ```bash
-python3 train.py task=NeedleRegrasp-v0 agent=dex use_wb=True batch_size=256 agent.aux_weight=10
+python train.py task=NeedleRegrasp-v0 agent=dex use_wb=True batch_size=256 agent.aux_weight=10
 ```
 
 ## افزودن یک الگوریتم RL جدید
